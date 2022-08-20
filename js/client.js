@@ -1,4 +1,4 @@
-// default values, safe to change to whatever you want
+// default value, safe to change to whatever you want
 const default_nickname = "You"
 
 /********************************/
@@ -8,7 +8,7 @@ const input = document.querySelector("#chat-input")
 const log = document.querySelector("#chat-log")
 const tabs = document.querySelector("#chats")
 
-var bot_name
+var active_chat
 
 var user_name = default_nickname
 var tab_handles = {}
@@ -57,9 +57,9 @@ function clearLog() {
 	partner.innerText = "???"
 }
 
-//warning: modifies argument by setting data.chat to bot_name (expects a new object to be created for each send)
+//warning: modifies argument by setting data.chat to active_chat (expects a new object to be created for each send)
 function sendMessage(data) {
-	data.chat = bot_name
+	data.chat = active_chat
 	fetch("/send", {
 		method: "POST",
 		headers: {'Content-Type': 'application/json'},
@@ -68,7 +68,7 @@ function sendMessage(data) {
 		response.json().then((parsed_response) => {
 			if (parsed_response.decided_name != null) {
 				openChat(parsed_response.decided_name)
-				if (bot_name != null) {
+				if (active_chat != null) {
 					sendMessage(data)
 				}
 			}
@@ -146,10 +146,10 @@ async function openChat(name) {
 	}
 	tab.classList.add("bg-primary")
 	clearLog()
-	bot_name = name
-	window.location.hash = encodeURIComponent(bot_name)
+	active_chat = name
+	window.location.hash = encodeURIComponent(active_chat)
 	if (_EVENTS != null) _EVENTS.close()
-	_EVENTS = new EventSource("/events?chat=" + encodeURIComponent(bot_name))
+	_EVENTS = new EventSource("/events?chat=" + encodeURIComponent(active_chat))
 	_EVENTS.onopen = (event) => {
 		log.classList.remove("loading", "loading-lg")
 	}
@@ -176,7 +176,7 @@ async function openChat(name) {
 
 setInterval(() => {
 	if (_EVENTS != null && _EVENTS.readyState == 2) {
-		openChat(bot_name)
+		openChat(active_chat)
 	}
 }, 1000)
 
@@ -191,4 +191,4 @@ if (url_chat.length !== 0) {
 	logMessage(null, "The name you specify will be used to store the chat context and memory. The same chat will be loaded from disk each time you re-open the chat using the same name.", true)
 	logMessage(null, "For more instructions, type \"/?\" or \"/help\".", true)
 }
-///openChat(url_chat.length !== 0 ? url_chat : bot_name)
+///openChat(url_chat.length !== 0 ? url_chat : active_chat)
