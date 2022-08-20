@@ -232,6 +232,7 @@ local function httpRequest(req, res)
 	end
 end
 
-print(("Listening on port %d..."):format(config.port))
-http.createServer(httpRequest):listen(config.port)
-print(("Ready; if everything is working correctly, you should now be able to visit the chat UI in your browser:\nhttp://127.0.0.1:%d"):format(config.port))
+local server = http.createServer(httpRequest)
+print(("Attempting to listen on port %d..."):format(config.port))
+server:listen(config.port)
+print(("If everything is working correctly, you should now be able to visit the chat UI in your browser: http://127.0.0.1:%d"):format(config.port))
