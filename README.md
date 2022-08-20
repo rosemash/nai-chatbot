@@ -1,10 +1,10 @@
 # NovelAI Chatbot
 
-![Screenshot of NovelAI Chatbot talking to Euterpe.](https://i.imgur.com/DXATW9B.png)
-
 This is a web server written in Lua that serves a web chatbot interface for use with NovelAI. It lets you talk to multiple concurrent AI chat partners at once, saving persistent chat memory to disk so you can resume your conversations on any device on your network.
 
-To use it, you will need a NovelAI API key, and will need to update the config file to reflect your NovelAI subscription tier (for access to Krake and higher context and output). Instructions on running NovelAI Chatbot and configuring a key are below.
+![Screenshot of NovelAI Chatbot talking to Euterpe.](https://i.imgur.com/DXATW9B.png)
+
+To use NovelAI Chatbot, you will need a NovelAI API key, and will need to update the config file to reflect your NovelAI subscription tier (for access to Krake and higher context and output). Instructions on running NovelAI Chatbot and configuring a key are below.
 
 # Running NovelAI Chatbot
 
