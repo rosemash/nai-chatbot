@@ -44,7 +44,7 @@ You will need to change the config file to add your API key and select the model
 
 * Change `use_krake = false;` to `use_krake = true;` if you have an Opus subscription and access to Krake v2.
 
-* Set `api_token = "";` by putting your API token into the quotation marks (instructions for that are in [Finding your NAI API Token](#finding-your-nai-api-token) above). This is important. The chatbot won't work at all without an API token.
+* Set `api_token = "";` by putting your API token into the quotation marks (instructions for that are in [Finding your NAI API Token](#finding-your-nai-api-token)). This is important. The chatbot won't work at all without an API token.
 
 Those are the only important options. The comments in the file provide explanations for what each of the rest of the options do, and you can adjust them as you see fit. When you are finished, save and close the file, and restart the chatbot server (if it's running).
 
