@@ -22,7 +22,7 @@ For Windows users: if you don't know what you are doing, follow these instructio
 
 Note that upon performing the second step, it should create 3 new files in the folder: `luvit.exe`, `luvi.exe`, and `lit.exe`. You can safely delete `luvi.exe` and `lit.exe` if you want.
 
-Since the second command installs luvit, you only need to follow the second step once; to start the server all subsequent times, simply follow the first step and the third step.
+Since the second step installs luvit, you only need to follow the second step once; to start the server all subsequent times, simply follow the first step and the third step.
 
 ## Windows/Linux (Advanced)
 
