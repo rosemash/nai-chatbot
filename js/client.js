@@ -169,13 +169,15 @@ async function openChat(name) {
 		}
 	}
 	_EVENTS.onerror = (event) => {
-		event.target.close()
-		clearLog()
+		if (event.target.readyState === 2) {
+			event.target.close()
+			clearLog()
+		}
 	}
 }
 
 setInterval(() => {
-	if (_EVENTS != null && _EVENTS.readyState == 2) {
+	if (_EVENTS != null && _EVENTS.readyState === 2) {
 		openChat(active_chat)
 	}
 }, 1000)
@@ -191,4 +193,5 @@ if (url_chat.length !== 0) {
 	logMessage(null, "The name you specify will be used to store the chat context and memory. The same chat will be loaded from disk each time you re-open the chat using the same name.", true)
 	logMessage(null, "For more instructions, type \"/?\" or \"/help\".", true)
 }
+
 ///openChat(url_chat.length !== 0 ? url_chat : active_chat)
