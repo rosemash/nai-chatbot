@@ -10,7 +10,7 @@ To use NovelAI Chatbot, you will need a NovelAI API token, and will need to upda
 
 To run NovelAI Chatbot, first clone this repository (or download it as a zip and extract it). NovelAI Chatbot is a Luvit project. Luvit is a standalone distribution of the Lua programming language bundled together with libuv, which enables Lua to do things like host a web server, make calls to NovelAI's REST API, and perform async i/o.
 
-Luvit is very straightforward to install. To use it, you will need to [bootstrap the Luvit runtime](https://luvit.io/install.html), which will leave you with `luvit.exe` (or `luvit` on Linux/MacOS). The instructions below explain how to retrieve the Luvit runtime and run NovelAI Chatbot with it.
+Luvit is very straightforward to install. To use it, you will need to [bootstrap the Luvit runtime](https://luvit.io/install.html), which will leave you with `luvit.exe` (or `luvit` on Linux/MacOS). The instructions below explain how to retrieve the Luvit runtime and run this project with it.
 
 ## Windows (Simple)
 
@@ -24,11 +24,11 @@ For Windows users: if you don't know what you are doing, follow these instructio
 
 Note that upon performing the second step, it should create 3 new files in the folder: `luvit.exe`, `luvi.exe`, and `lit.exe`. You can safely delete `luvi.exe` and `lit.exe` if you want.
 
-Since the second step installs luvit, you only need to follow the second step once; to start the server all subsequent times, simply follow the first step and the third step.
+Since the second step retrieves the Luvit runtime, you only need to follow it once; once you have it, starting the server only requires repeating the first and third steps.
 
 ## Windows/Linux (Advanced)
 
-If you're a more advanced user, you probably already know how to install luvit using the instructions on the install page. Regardless of your platform, I recommend putting the `luvit` (or `luvit.exe`) and (`lit` or `lit.exe`) binaries in your path; `luvi` (or `luvi.exe`) is used for bootstrapping, and can be deleted.
+If you're a more advanced user, you probably already know how to install Luvit using the instructions on the install page. Regardless of your platform, I recommend putting the `luvit` (or `luvit.exe`) and (`lit` or `lit.exe`) binaries in your path; `luvi` (or `luvi.exe`) is used for bootstrapping, and can be deleted.
 
 The dependencies are already included in this repo's [deps](deps) directory (most of them have their licenses appended to the top, and all allow redistribution) but you can easily re-install them like this:
 
