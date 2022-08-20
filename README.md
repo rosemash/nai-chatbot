@@ -4,7 +4,7 @@ This is a web server written in Lua that serves a web chatbot interface for use 
 
 ![Screenshot of NovelAI Chatbot talking to Euterpe.](https://i.imgur.com/DXATW9B.png)
 
-To use NovelAI Chatbot, you will need a NovelAI API key, and will need to update the config file to reflect your NovelAI subscription tier (for access to Krake and higher context and output). Instructions on running NovelAI Chatbot and configuring a key are below.
+To use NovelAI Chatbot, you will need a NovelAI API token, and will need to update the config file to reflect your NovelAI subscription tier (for access to Krake and higher context and output). Instructions on running NovelAI Chatbot and configuring a key are below.
 
 # Running NovelAI Chatbot
 
@@ -40,7 +40,7 @@ The port that the web server binds on can be changed in the config file. The ser
 
 # Configuring for your NAI account
 
-You will need to change the config file to add your API key and select the model that reflects your subscription tier before using the chatbot. Open the config in any text editor, then change the following values to reflect your account:
+You will need to change the config file to add your API token and select the model that reflects your subscription tier before using the chatbot. Open the config in any text editor, then change the following values to reflect your account:
 
 * Change `use_krake = false;` to `use_krake = true;` if you have an Opus subscription and access to Krake v2.
 
