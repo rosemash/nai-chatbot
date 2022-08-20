@@ -45,7 +45,7 @@ function logMessage(name, message, system) {
 	}
 	log_entry.appendChild(document.createElement(`${system ? "em" : "span"}`)).appendChild(document.createTextNode(message))
 	log.appendChild(log_entry)
-	if (pending !== null && name == user_name) {
+	if (pending !== null && name !== active_chat) {
 		logPending()
 	}
 	log.scrollTop = log.scrollHeight
