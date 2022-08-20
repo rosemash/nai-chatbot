@@ -58,9 +58,11 @@ The chatbot requires a NovelAI API token to make requests on behalf of your acco
 
 3. Open the Network Tools on your web browser. (For Chrome or Firefox, you do this by pressing Ctrl+Shift+I, then switching to the Network tab.)
 
-4. Generate something. You should see two requests to `api.novelai.net/ai/generate-stream`, which might look something like this:\n![Screenshot of the Network panel.](https://i.imgur.com/N2RMLuR.png)
+4. Generate something. You should see two requests to `api.novelai.net/ai/generate-stream`, which might look something like this:  
+![Screenshot of the Network panel.](https://i.imgur.com/N2RMLuR.png)
 
-5. Select the second request, then in the Headers tab of the inspection panel, scroll down to the very bottom. Look for a header called Authorization:\n![Screenshot showing the Authorization header in the Network panel.](https://i.imgur.com/UOJKQK4.png)
+5. Select the second request, then in the Headers tab of the inspection panel, scroll down to the very bottom. Look for a header called Authorization:  
+![Screenshot showing the Authorization header in the Network panel.](https://i.imgur.com/UOJKQK4.png)
 
 The long string (after "Bearer", not including it) is your API token. Copy it for use in [Configuring for your NAI Account](#configuring-for-your-nai-account). There is nothing else you need from here.
 
