@@ -8,7 +8,9 @@ To use NovelAI Chatbot, you will need a NovelAI API token, and will need to upda
 
 # Running NovelAI Chatbot
 
-To run NovelAI chatbot, clone this repository (or download it as a zip and extract it). [You now need to install luvit for your platform.](https://luvit.io/install.html)
+To run NovelAI Chatbot, first clone this repository (or download it as a zip and extract it). NovelAI Chatbot is a Luvit project. Luvit is a standalone distribution of the Lua programming language bundled together with libuv, which enables Lua to do things like host a web server, make calls to NovelAI's REST API, and perform async i/o.
+
+Luvit is very straightforward to install. To use it, you will need to [bootstrap the Luvit runtime](https://luvit.io/install.html), which will leave you with `luvit.exe` (or `luvit` on Linux/MacOS). The instructions below explain how to retrieve the Luvit runtime and run NovelAI Chatbot with it.
 
 ## Windows (Simple)
 
