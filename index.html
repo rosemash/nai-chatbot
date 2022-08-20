@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="browser.css">
+		<link rel="stylesheet" href="spectre.css">
+		<script async src="client.js" type="text/javascript"></script>
+	</head>
+	<body class="bg-primary">
+		<div class="panel p-absolute bg-dark" style="margin:20px;top:0;left:0;right:0;bottom:0">
+			<div class="panel-header">
+				<ul class="tab tab-block" style="display:none;" id="chats"></ul>
+				<div class="panel-title" id="chat-header">Your conversation with <strong id="bot-name"></strong></div>
+			</div>
+			<div class="panel-body" id="chat-log"></div>
+			<div class="panel-footer">
+				<input class="form-input bg-dark" type="text" id="chat-input" maxlength="256" placeholder="Chat">
+			</div>
+		</div>
+	</body>
+</html>

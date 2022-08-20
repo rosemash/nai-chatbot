@@ -1,0 +1,19 @@
+/* this file is for adjusting the scrollbar in various browser implementations */
+
+/* Firefox and IE 10+ */
+.container {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none; 
+}
+
+/* WebKit */
+::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+}
+
+/* if all else fails, this should ask the browser to render a dark scroll bar */
+:root {
+	color-scheme: dark;
+}
