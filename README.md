@@ -33,7 +33,7 @@ If you're a more advanced user, you probably already know how to install Luvit u
 The dependencies are already included in this repo's [deps](deps) directory (most of them have their licenses appended to the top, and all allow redistribution) but you can easily re-install them like this:
 
 ```
-$ lit install lit/secure-socket
+$ lit install luvit/secure-socket
 $ lit install creationix/coro-http
 $ lit install creationix/base64
 ```
