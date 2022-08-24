@@ -110,7 +110,6 @@ local function httpRequest(req, res)
 					else --erase memory
 						local found = false
 						chats[chat.chat].memory = chats[chat.chat].memory:gsub("\n?([^\n]+)", function(line)
-							print(line)
 							if not found and line:lower():find(chat.message:lower(), nil, true) then
 								found = true
 								broadcast(chats[chat.chat].connections, json.encode{system=true, message=("Removed the following information from memory: \"%s\""):format(line)})
