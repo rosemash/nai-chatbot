@@ -67,10 +67,7 @@ function sendMessage(data) {
 	}).then((response) => {
 		response.json().then((parsed_response) => {
 			if (parsed_response.decided_name != null) {
-				openChat(parsed_response.decided_name)
-				if (active_chat != null) {
-					sendMessage(data)
-				}
+				openChat(parsed_response.decided_name, data)
 			}
 		})
 	})
@@ -89,6 +86,12 @@ document.body.addEventListener("keydown", (event) => {
 					memory: true,
 					message: message.substring(10)
 				})
+			} else if (message.substring(0, 8) == "/forget " && message.length > 8) {
+				sendMessage({
+					memory: true,
+					erase: true,
+					message: message.substring(8)
+				})
 			} else if (message.substring(0, 7) === "/memory") {
 				sendMessage({
 					memory: true
@@ -98,7 +101,8 @@ document.body.addEventListener("keydown", (event) => {
 			} else if (message.substring(0, 2) == "/?" || message.substring(0, 5) == "/help") {
 				logMessage(null, "The following commands are recognized:", true)
 				logMessage(null, "* /name <nickname> (OR /nick <nickname>): set your nickname to the given string (the AI can see this)", true)
-				logMessage(null, "* /remember <string>: store something to this chat's permanent memory (use objective third person, avoid third person)", true)
+				logMessage(null, "* /remember <entry>: store something to this chat's permanent memory (use objective third person, avoid third person)", true)
+				logMessage(null, "* /forget <entry>: remove an entry from memory - references part of the entry, case-insensitive", true)
 				logMessage(null, "* /memory: view this chat's permanent memory", true)
 				logMessage(null, "* /chat <name>: open a concurrent chat tab with a partner of the specified name", true)
 				logMessage(null, "* ![message]: initiate a scene transition; the message is optional, and is inserted at the beginning of the new scene", true)
@@ -116,7 +120,7 @@ document.body.addEventListener("keydown", (event) => {
 })
 
 var _EVENTS
-async function openChat(name) {
+function openChat(name, opening_message) {
 	if (name == null) return
 	var tab = tab_handles[name]
 	if (tab == null) {
@@ -152,6 +156,9 @@ async function openChat(name) {
 	_EVENTS = new EventSource("/events?chat=" + encodeURIComponent(active_chat))
 	_EVENTS.onopen = (event) => {
 		log.classList.remove("loading", "loading-lg")
+		if (active_chat != null && opening_message != null) {
+			sendMessage(opening_message)
+		}
 	}
 	_EVENTS.onmessage = (event) => {
 		var chat = JSON.parse(event.data)
@@ -169,10 +176,8 @@ async function openChat(name) {
 		}
 	}
 	_EVENTS.onerror = (event) => {
-		if (event.target.readyState === 2) {
-			event.target.close()
-			clearLog()
-		}
+		event.target.close()
+		clearLog()
 	}
 }
 

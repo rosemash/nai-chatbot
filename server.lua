@@ -58,7 +58,7 @@ local function prepareContext(chat)
 	if #chat.memory > 0 then
 		for i = #lines, 1, -1 do
 			if lines[i-1] == config.scene_delimiter or i == 1 then
-				table.insert(lines, math.max(i, #lines-2), chat.memory)
+				table.insert(lines, math.max(i, #lines-2), "In the chat transcript below, the following facts are made evident:\n" .. chat.memory)
 				break
 			end
 		end
@@ -97,19 +97,36 @@ local function httpRequest(req, res)
 				return --no, I won't send 400 bad request, deal with it
 			end
 			if chat.memory then
-				if chat.message then --set memory
-					local new_memory = chats[chat.chat].memory .. (#chats[chat.chat].memory == 0 and "In the chat transcript below, the following facts are made evident:\n" or "\n") .. chat.message --("- %s"):format(chat.message)
-					if #new_memory + #chats[chat.chat].preamble <= (config.use_krake and config.context_size_limit.krake or config.context_size_limit.other)/2 then
-						chats[chat.chat].memory = new_memory
-						saveChatData(chat.chat, chats[chat.chat])
-						broadcast(chats[chat.chat].connections, json.encode{system=true, message=("The following information was saved to memory: \"%s\""):format(chat.message)})
-					else
-						broadcast(chats[chat.chat].connections, json.encode{system=true, message="The memory is too full to store your entry."})
+				if chat.message and #chat.message > 0 then
+					if not chat.erase then --set memory
+						local new_memory = chats[chat.chat].memory .. (#chats[chat.chat].memory > 0 and "\n%s" or "%s"):format(chat.message)
+						if #new_memory + #chats[chat.chat].preamble <= (config.use_krake and config.context_size_limit.krake or config.context_size_limit.other)/2 then
+							chats[chat.chat].memory = new_memory
+							saveChatData(chat.chat, chats[chat.chat])
+							broadcast(chats[chat.chat].connections, json.encode{system=true, message=("The following information was saved to memory: \"%s\""):format(chat.message)})
+						else
+							broadcast(chats[chat.chat].connections, json.encode{system=true, message="The memory is too full to store your entry."})
+						end
+					else --erase memory
+						local found = false
+						chats[chat.chat].memory = chats[chat.chat].memory:gsub("\n?([^\n]+)", function(line)
+							print(line)
+							if not found and line:lower():find(chat.message:lower(), nil, true) then
+								found = true
+								broadcast(chats[chat.chat].connections, json.encode{system=true, message=("Removed the following information from memory: \"%s\""):format(line)})
+								return ""
+							end
+						end)
+						if found then
+							saveChatData(chat.chat, chats[chat.chat])
+						else
+							broadcast(chats[chat.chat].connections, json.encode{system=true, message="The memory contains no entries that match your input."})
+						end
 					end
 				else --get memory
 					if #chats[chat.chat].memory > 0 then
 						broadcast(chats[chat.chat].connections, json.encode{system=true, message="The following information is stored permanently in this chat's context:"})
-						for line in chats[chat.chat].memory:gsub(".-\n", "", 1):gmatch("\n?([^\n]+)") do
+						for line in chats[chat.chat].memory:gmatch("\n?([^\n]+)") do
 							broadcast(chats[chat.chat].connections, json.encode{system=true, message=("- %s"):format(line)})
 						end
 					else
