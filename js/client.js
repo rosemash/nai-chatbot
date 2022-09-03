@@ -3,6 +3,9 @@ const default_nickname = "You"
 
 /********************************/
 
+const chatpanel = document.querySelector("#chat-panel")
+const preamblepanel = document.querySelector("#preamble-panel")
+const preamble = document.querySelector("#preamble-editor")
 const partner = document.querySelector("#bot-name")
 const input = document.querySelector("#chat-input")
 const log = document.querySelector("#chat-log")
@@ -58,66 +61,102 @@ function clearLog() {
 }
 
 //warning: modifies argument by setting data.chat to active_chat (expects a new object to be created for each send)
-function sendMessage(data) {
+async function sendMessage(data) {
 	data.chat = active_chat
-	fetch("/send", {
+	const response = await fetch("/send", {
 		method: "POST",
 		headers: {'Content-Type': 'application/json'},
 		body: JSON.stringify(data)
-	}).then((response) => {
-		response.json().then((parsed_response) => {
-			if (parsed_response.decided_name != null) {
-				openChat(parsed_response.decided_name, data)
-			}
-		})
 	})
+	const response_json = await response.json()
+	if (response_json.decided_name != null) {
+		openChat(response_json.decided_name, data)
+		return null
+	} else {
+		return response_json
+	}
+}
+
+function submitPreamble() {
+	preamblepanel.style.setProperty("display", "none")
+	chatpanel.style.removeProperty("display")
+	sendMessage({
+		preamble: true,
+		message: preamble.value
+	})
+	preamble.value = ""
 }
 
 document.body.addEventListener("keydown", (event) => {
-	if (event.key === "Enter" && input.value !== "") {
-		var message = input.value
-		input.value = ""
-		if (message[0] === "/") {
-			if (["/name ", "/nick "].indexOf(message.substring(0, 6)) !== -1 && message.length > 6) {
-				user_name = message.substring(6)
-				logMessage(null, `Your name is now ${user_name}.`, true)
-			} else if (message.substring(0, 10) === "/remember " && message.length > 10) {
-				sendMessage({
-					memory: true,
-					message: message.substring(10)
-				})
-			} else if (message.substring(0, 8) == "/forget " && message.length > 8) {
-				sendMessage({
-					memory: true,
-					erase: true,
-					message: message.substring(8)
-				})
-			} else if (message.substring(0, 7) === "/memory") {
-				sendMessage({
-					memory: true
-				})
-			} else if (message.substring(0, 6) === "/chat " && message.length > 6) {
-				openChat(message.substring(6).trim())
-			} else if (message.substring(0, 2) == "/?" || message.substring(0, 5) == "/help") {
-				logMessage(null, "The following commands are recognized:", true)
-				logMessage(null, "* /name <nickname> (OR /nick <nickname>): set your nickname to the given string (the AI can see this)", true)
-				logMessage(null, "* /remember <entry>: store something to this chat's permanent memory (use objective third person, avoid third person)", true)
-				logMessage(null, "* /forget <entry>: remove an entry from memory - references part of the entry, case-insensitive", true)
-				logMessage(null, "* /memory: view this chat's permanent memory", true)
-				logMessage(null, "* /chat <name>: open a concurrent chat tab with a partner of the specified name", true)
-				logMessage(null, "* ![message]: initiate a scene transition; the message is optional, and is inserted at the beginning of the new scene", true)
-				logMessage(null, "* /? (OR /help): display this message", true)
-			}
-		} else {
-			sendMessage({
-				name: user_name,
-				message: message
-			})
+	if (preamblepanel.style.display !== "none") {
+		if (event.ctrlKey && event.key === "Enter") {
+			submitPreamble()
 		}
 	} else {
-		input.focus()
+		if (event.key === "Enter" && input.value !== "") {
+			var message = input.value
+			input.value = ""
+			if (message[0] === "/") {
+				if (["/name ", "/nick "].indexOf(message.substring(0, 6)) !== -1 && message.length > 6) {
+					user_name = message.substring(6)
+					logMessage(null, `Your name is now ${user_name}.`, true)
+				} else if (message.substring(0, 8) === "/example" || message.substring(0, 7) == "/prompt") {
+					if (active_chat != null) {
+						preamble.innerText = sendMessage({
+							preamble: true
+						}).then((response) => {
+							if (response != null) {
+								chatpanel.style.setProperty("display", "none")
+								preamblepanel.style.removeProperty("display")
+								preamble.value = response.preamble
+							}
+						})
+					} else {
+						logMessage(null, "You must have a chat active to use this command.", true)
+					}
+				} else if (message.substring(0, 10) === "/remember " && message.length > 10) {
+					sendMessage({
+						memory: true,
+						message: message.substring(10)
+					})
+				} else if (message.substring(0, 8) == "/forget " && message.length > 8) {
+					sendMessage({
+						memory: true,
+						erase: true,
+						message: message.substring(8)
+					})
+				} else if (message.substring(0, 7) === "/memory") {
+					sendMessage({
+						memory: true
+					})
+				} else if (message.substring(0, 6) === "/chat " && message.length > 6) {
+					openChat(message.substring(6).trim())
+				} else if (message.substring(0, 2) == "/?" || message.substring(0, 5) == "/help") {
+					logMessage(null, "The following commands are recognized:", true)
+					logMessage(null, "* /name <nickname> (OR /nick <nickname>): set your nickname to the given string (the AI can see this)", true)
+					logMessage(null, "* /example (OR /prompt): open an editor to interactively adjust the example text the AI defers to at the beginning of the chat", true)
+					logMessage(null, "* /remember <entry>: store something to this chat's permanent memory (use objective third person, avoid third person)", true)
+					logMessage(null, "* /forget <entry>: remove an entry from memory - references part of the entry, case-insensitive", true)
+					logMessage(null, "* /memory: view this chat's permanent memory", true)
+					logMessage(null, "* /chat <name>: open a concurrent chat tab with a partner of the specified name", true)
+					logMessage(null, "* ![message]: initiate a scene transition; the message is optional, and is inserted at the beginning of the new scene", true)
+					logMessage(null, "* /? (OR /help): display this message", true)
+				} else {
+					logMessage(null, `"${message.split(" ")[0]}" is an unrecognized command.`, true)
+				}
+			} else {
+				sendMessage({
+					name: user_name,
+					message: message
+				})
+			}
+		} else {
+			input.focus()
+		}
 	}
 })
+
+document.querySelector("#submit-preamble").addEventListener("click", submitPreamble)
 
 var _EVENTS
 function openChat(name, opening_message) {
