@@ -83,7 +83,3 @@ The long string (after "Bearer", not including it) is your API token. Copy it fo
 NovelAI API tokens last a very long time, but they probably eventually expire. If you don't want to repeat this process again in the future, there is a utility script in this repository - [novelai/login.lua](novelai/login.lua) - which can be configured to generate a new API token using your NovelAI login key anytime you need.
 
 The script isn't currently documented, but it should be easy enough to figure out if the above steps were simple to you. I may at some point add a way to login using your NovelAI credentials so none of this is necessary, but due to the cryptographic way NovelAI's login API works, it would require adding even more dependencies to this project.
-
-# Help and Feedback
-
-If you have questions about setting up the project, message me on Discord at rosemash#3992.
